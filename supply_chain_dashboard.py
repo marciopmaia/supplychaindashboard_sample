@@ -50,6 +50,10 @@ fig = px.bar(df, x='product_id', y='stock', color='should_reorder',
 fig.add_hline(y=df['reorder_point'].mean(), line_dash="dash", annotation_text="Avg Reorder Point")
 fig.update_traces(hovertemplate='Product: %{x}<br>Stock: %{y}<br>Demand: %{customdata[0]}<br>Lead Time: %{customdata[1]}', 
                   customdata=df[['demand_rate', 'lead_time']])
+
+# Working to output dashboard
+#TODO implement date folder to output to
+# fig.write_image('outputdashboards/dashboard.png')
 fig.show()
 
 # Save to CSV for documentation

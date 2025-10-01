@@ -2,5 +2,6 @@
 # Versions are specified below, but likely will work with older versions
 
 pandas == 1.5.3
-plotly == 5.9.0
+plotly == 6.1.1
 pulp == 3.3.0
+kaleido == 1.1.0
