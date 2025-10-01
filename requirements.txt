@@ -1,0 +1,6 @@
+# Current required files to run and execute the python dashboard for supply chain.
+# Versions are specified below, but likely will work with older versions
+
+pandas == 1.5.3
+plotly == 5.9.0
+pulp == 3.3.0
