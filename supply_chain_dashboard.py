@@ -58,13 +58,14 @@ fig.update_traces(hovertemplate='Product: %{x}<br>Name: %{customdata[0]}<br>Desc
 today = datetime.now().strftime('%Y-%m-%d')
 
 # Create the output folder path
+# TODO ensure folders are created if they don't exist. 
 output_folder = f'data/images/outputdashboards/{today}'
 
 # Create the directory if it doesn't exist
 os.makedirs(output_folder, exist_ok=True)
 
 # Create dashboard.png
-fig.write_image(f'{output_folder}/dashboard.png')
+fig.write_image(f'{output_folder}/inventory_dashboard.png')
 
 # Visualize cost to reorder each product
 fig2 = px.bar(df, x='product_id', y='reorder_cost', title='Reorder Costs by Product',
