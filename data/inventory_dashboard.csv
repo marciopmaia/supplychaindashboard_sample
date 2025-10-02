@@ -1,4 +1,0 @@
-product_id,stock,demand_rate,lead_time,reorder_cost,reorder_point,should_reorder
-P1,50,10,3,100,30,0.0
-P2,20,5,2,80,10,0.0
-P3,100,15,4,120,60,0.0

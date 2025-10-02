@@ -1,1 +1,2 @@
-outputdashboards/*
+data/images/outputdashboards/*
+!/data/images/outputdashboards

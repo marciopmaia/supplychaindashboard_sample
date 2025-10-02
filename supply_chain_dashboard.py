@@ -8,15 +8,13 @@ import os
 
 from datetime import datetime
 
-# Sample supply chain inventory data (replace later with csv)
-data = {
-    'product_id': ['P1', 'P2', 'P3'],
-    'stock': [50, 20, 100],  # In 000s units
-    'demand_rate': [10, 5, 15],  # Units in 000s per day
-    'lead_time': [3, 2, 4],      # Days to restock 1,000 units
-    'reorder_cost': [100, 80, 120]  # Cost per reorder in 000s
-}
-df = pd.DataFrame(data)
+# Sample supply chain inventory data 
+try:
+    df = pd.read_csv('data/input/inventory_data.csv')
+except FileNotFoundError:
+    print("Error: 'data/inventory_data.csv' not found. Please create the file.")
+    exit(1)
+# df = pd.DataFrame(data)
 
 # Calculate reorder points (basic: demand_rate * lead_time)
 df['reorder_point'] = df['demand_rate'] * df['lead_time']
