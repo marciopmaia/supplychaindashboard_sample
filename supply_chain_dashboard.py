@@ -57,7 +57,7 @@ fig.update_traces(hovertemplate='Product: %{x}<br>Stock: %{y}<br>Demand: %{custo
 today = datetime.now().strftime('%Y-%m-%d')
 
 # Create the output folder path
-output_folder = f'outputdashboards/{today}'
+output_folder = f'data/images/outputdashboards/{today}'
 
 # Create the directory if it doesn't exist
 os.makedirs(output_folder, exist_ok=True)
@@ -67,4 +67,4 @@ fig.write_image(f'{output_folder}/dashboard.png')
 fig.show()
 
 # Save to CSV for documentation
-df.to_csv('data/inventory_dashboard.csv', index=False)
+df.to_csv('data/output/inventory_dashboard.csv', index=False)
