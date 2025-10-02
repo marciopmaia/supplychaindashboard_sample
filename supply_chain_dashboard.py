@@ -4,6 +4,9 @@
 import pandas as pd
 import plotly.express as px
 import pulp
+import os
+
+from datetime import datetime
 
 # Sample supply chain inventory data (replace later with csv)
 data = {
@@ -51,9 +54,18 @@ fig.add_hline(y=df['reorder_point'].mean(), line_dash="dash", annotation_text="A
 fig.update_traces(hovertemplate='Product: %{x}<br>Stock: %{y}<br>Demand: %{customdata[0]}<br>Lead Time: %{customdata[1]}', 
                   customdata=df[['demand_rate', 'lead_time']])
 
-# Working to output dashboard
-#TODO implement date folder to output to
-# fig.write_image('outputdashboards/dashboard.png')
+
+# Get today's date in YYYY-MM-DD format
+today = datetime.now().strftime('%Y-%m-%d')
+
+# Create the output folder path
+output_folder = f'outputdashboards/{today}'
+
+# Create the directory if it doesn't exist
+os.makedirs(output_folder, exist_ok=True)
+
+# Create dashboard.png
+fig.write_image(f'{output_folder}/dashboard.png')
 fig.show()
 
 # Save to CSV for documentation
