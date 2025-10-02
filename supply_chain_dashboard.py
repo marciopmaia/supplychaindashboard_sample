@@ -6,6 +6,7 @@ import plotly.express as px
 import pulp
 import os
 
+from dash import Dash, dcc, html
 from datetime import datetime
 
 # Sample supply chain inventory data 
@@ -74,3 +75,18 @@ fig2.write_image(f'{output_folder}/cost-to-reorder.png')
 
 # Save to CSV for documentation
 df.to_csv('data/output/inventory_dashboard.csv', index=False)
+
+# Dash interface for web-based dashboard
+if __name__ == '__main__':
+    try:
+        app = Dash(__name__)
+        app.layout = html.Div([
+            html.H1("Supply Chain Inventory Dashboard"),
+            dcc.Graph(id='stock-graph', figure=fig),
+            html.H2("Reorder Costs"),
+            dcc.Graph(id='cost-graph', figure=fig2)
+        ])
+        app.run(debug=True)
+    except Exception as e:
+        print(f"Error running Dash server: {e}")
+        print("Check if port 8050 is free or try: app.run(debug=True, port=8051)")
