@@ -13,19 +13,6 @@ A sample and simple Python-based tool to
 - Optimizes reorder decisions within a budget.
 - Visualizes stock and reorder costs with interactive Plotly/Dash charts (names/descriptions in hover text).
 
-
-# Supply Chain Dashboard
-A Python tool to visualize inventory and optimize reorder points for 20 products using `pandas`, `plotly`, `pulp`, and `dash`.
-
-## Setup
-1. Install: `pip install -r requirements.txt`
-2. Add `data/inventory_data.csv` (sample provided).
-4. Run: `python supply_chain_dashboard.py`
-5. Outputs: Dash web interface (http://127.0.0.1:8050), `data/inventory_dashboard.csv`, `output/dashboard.png`, `output/reorder_costs.png`
-
-## Features
-
-
 ## Sample Output
-![Stock Dashboard](output/images/outputdashboards/2025-10-01/inventory_dashboard.png)
-![Reorder Costs](output/images/outputdashboards/2025-10-01/cost-to-reorder.png)
+![Stock Dashboard](data/images/outputdashboards/2025-10-02/inventory_dashboard.png)
+![Reorder Costs](data/images/outputdashboards/2025-10-02/cost-to-reorder.png)
