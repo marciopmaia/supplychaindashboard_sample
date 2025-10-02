@@ -45,13 +45,14 @@ prob.solve()
 df['should_reorder'] = [reorder[pid].varValue for pid in df['product_id']]
 
 # Visualize inventory levels
-fig = px.bar(df, x='product_id', y='stock', color='should_reorder', 
-             title='Inventory Levels and Reorder Decisions',
-             labels={'stock': 'Stock (000s units)', 'product_id': 'Product ID'})
-fig.add_hline(y=df['reorder_point'].mean(), line_dash="dash", annotation_text="Avg Reorder Point")
-fig.update_traces(hovertemplate='Product: %{x}<br>Stock: %{y}<br>Demand: %{customdata[0]}<br>Lead Time: %{customdata[1]}', 
-                  customdata=df[['demand_rate', 'lead_time']])
-
+fig = px.bar(df, x='product_id', y='stock', color='should_reorder',
+             title='Inventory Levels and Reorder Decisions (20 Products)',
+             labels={'stock': 'Stock (000s units)', 'product_id': 'Product ID'},
+             color_continuous_scale='Viridis')
+fig.add_hline(y=df['reorder_point'].mean(), line_dash="dash", line_color="red", annotation_text="Avg Reorder Point", annotation_font_size=20,
+              annotation_font_color="red")
+fig.update_traces(hovertemplate='Product: %{x}<br>Name: %{customdata[0]}<br>Description: %{customdata[1]}<br>Purpose: %{customdata[2]}<br>Stock: %{y}k units<br>Demand: %{customdata[3]}k/day<br>Lead Time: %{customdata[4]} days<br>Safety Stock: %{customdata[5]}k units',
+                  customdata=df[['product_name', 'description', 'purpose', 'demand_rate', 'lead_time', 'safety_stock']])
 
 # Get today's date in YYYY-MM-DD format
 today = datetime.now().strftime('%Y-%m-%d')
@@ -64,7 +65,11 @@ os.makedirs(output_folder, exist_ok=True)
 
 # Create dashboard.png
 fig.write_image(f'{output_folder}/dashboard.png')
-fig.show()
+
+# Visualize cost to reorder each product
+fig2 = px.bar(df, x='product_id', y='reorder_cost', title='Reorder Costs by Product',
+              labels={'reorder_cost': 'Cost (000s USD)'})
+fig2.write_image(f'{output_folder}/cost-to-reorder.png')
 
 # Save to CSV for documentation
 df.to_csv('data/output/inventory_dashboard.csv', index=False)
