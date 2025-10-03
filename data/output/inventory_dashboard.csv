@@ -1,21 +1,21 @@
 product_id,product_name,description,purpose,stock,demand_rate,lead_time,reorder_cost,safety_stock,reorder_point,should_reorder
-P1,AI Chip X,High-performance AI processor,Data center computing,50,10,3,100,10,30,0.0
-P2,Sensor Module Y,Precision temperature sensor,Robotics automation,20,5,2,80,5,10,0.0
-P3,GPU Unit Z,Graphics processing unit,AI training,100,15,4,120,15,60,0.0
-P4,Memory Card A,High-capacity flash memory,Storage solutions,30,8,3,90,8,24,0.0
-P5,Cooling Fan B,Efficient cooling system,Server maintenance,60,12,5,110,12,60,0.0
-P6,Power Supply C,Stable power delivery,Data center power,25,6,2,85,6,12,0.0
-P7,FPGA Board D,Programmable logic board,Embedded systems,80,14,4,130,14,56,0.0
-P8,Network Switch E,High-speed network switch,Cloud infrastructure,45,7,3,95,7,21,0.0
-P9,SSD Drive F,Solid-state drive,High-speed storage,70,11,5,115,11,55,0.0
-P10,Router G,Enterprise-grade router,Network connectivity,35,9,2,100,9,18,0.0
-P11,AI Chip H,Low-power AI processor,IoT devices,90,13,4,125,13,52,0.0
-P12,Sensor I,Environmental sensor,Smart buildings,15,5,3,80,5,15,0.0
-P13,Battery J,High-capacity battery,Portable devices,55,10,5,105,10,50,0.0
-P14,Cable K,High-speed data cable,Data transfer,40,8,2,90,8,16,0.0
-P15,Server Rack L,Modular server rack,Data center setup,75,12,4,120,12,48,0.0
-P16,LED Module M,Energy-efficient lighting,Smart cities,30,6,3,85,6,18,0.0
-P17,Processor N,General-purpose CPU,Enterprise computing,65,11,5,110,11,55,0.0
-P18,Adapter O,Universal power adapter,Device compatibility,50,7,2,95,7,14,0.0
-P19,Memory Unit P,High-density RAM,Server memory,85,13,4,130,13,52,0.0
-P20,Switch Q,Gigabit network switch,Network expansion,20,9,3,100,9,27,1.0
+P1,AI Chip X,High-performance AI processor,Data center computing,50,10,3,100,10,40,0.0
+P2,Sensor Module Y,Precision temperature sensor,Robotics automation,20,5,2,80,5,15,0.0
+P3,GPU Unit Z,Graphics processing unit,AI training,100,15,4,120,15,75,0.0
+P4,Memory Card A,High-capacity flash memory,Storage solutions,30,8,3,90,8,32,1.0
+P5,Cooling Fan B,Efficient cooling system,Server maintenance,60,12,5,110,12,72,1.0
+P6,Power Supply C,Stable power delivery,Data center power,25,6,2,85,6,18,0.0
+P7,FPGA Board D,Programmable logic board,Embedded systems,80,14,4,130,14,70,0.0
+P8,Network Switch E,High-speed network switch,Cloud infrastructure,45,7,3,95,7,28,0.0
+P9,SSD Drive F,Solid-state drive,High-speed storage,70,11,5,115,11,66,0.0
+P10,Router G,Enterprise-grade router,Network connectivity,35,9,2,100,9,27,0.0
+P11,AI Chip H,Low-power AI processor,IoT devices,90,13,4,125,13,65,0.0
+P12,Sensor I,Environmental sensor,Smart buildings,15,5,3,80,5,20,1.0
+P13,Battery J,High-capacity battery,Portable devices,55,10,5,105,10,60,1.0
+P14,Cable K,High-speed data cable,Data transfer,40,8,2,90,8,24,0.0
+P15,Server Rack L,Modular server rack,Data center setup,75,12,4,120,12,60,0.0
+P16,LED Module M,Energy-efficient lighting,Smart cities,30,6,3,85,6,24,0.0
+P17,Processor N,General-purpose CPU,Enterprise computing,65,11,5,110,11,66,1.0
+P18,Adapter O,Universal power adapter,Device compatibility,50,7,2,95,7,21,0.0
+P19,Memory Unit P,High-density RAM,Server memory,85,13,4,130,13,65,0.0
+P20,Switch Q,Gigabit network switch,Network expansion,20,9,3,100,9,36,1.0
