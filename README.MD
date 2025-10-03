@@ -1,5 +1,8 @@
+# Non Production
+This is a non production sample using dashboards with Flask and other Python libraries
+
 # Supply Chain Dashboard
-A sample and simple Python-based tool to 
+A sample and simple Python-based tool to display a sample for Supply Chain, including admin logins, and other enhancements
 1. Visualize inventory levels and optimize reorder points using `pandas`, `plotly`, and `pulp`.
 2. Visualize the cost to reorder inventory per bulk and per unit
 
