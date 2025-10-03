@@ -1,24 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Login</title>
+    <title>Supply Chain Dashboard</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Supply Chain Dashboard - Admin Login</h1>
-    {% if form.errors %}
-        <p class="error">Invalid credentials</p>
-    {% endif %}
-    <form method="POST" action="{{ url_for('login') }}">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            <label>{{ form.username.label }}: {{ form.username(size=20) }}</label>
+    <div class="container">
+        <h1>Welcome to the Supply Chain Dashboard</h1>
+        <p>Manage and optimize your supply chain inventory with real-time insights and analytics.</p>
+        <p>Get started by logging in or viewing the dashboard.</p>
+        <div class="links">
+            <a href="/login" class="button">Log In</a>
+            <a href="/dashboard/" class="button">View Dashboard</a>
         </div>
-        <div class="form-group">
-            <label>{{ form.password.label }}: {{ form.password(size=20) }}</label>
-        </div>
-        {{ form.submit }}
-    </form>
-    <p><a href="/dashboard/">View Dashboard</a></p>
+    </div>
 </body>
 </html>

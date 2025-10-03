@@ -24,19 +24,18 @@ df, fig, fig2 = load_and_optimize()
 # Flask routes
 @server.route('/')
 def index():
-    return redirect(url_for('login'))
+    return render_template("index.html")
 
 @server.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        #TODO update to remove hardcode
-        if form.username.data == 'admin' and form.password.data == 'password':
+        if form.username.data == 'admin' and form.password.data == 'password':  # TODO: Replace with secure auth
             session['logged_in'] = True
             return redirect(url_for('admin'))
         else:
-            return render_template('index.html', form=form, error='Invalid credentials')
-    return render_template('index.html', form=form)    
+            return render_template('login.html', form=form, error='Invalid username or password')
+    return render_template('login.html', form=form)
 
 @server.route('/admin')
 def admin():
@@ -110,6 +109,12 @@ def settings():
         return redirect(url_for('admin'))
 
     return render_template('settings.html', form=form)
+
+@server.route('/dashboard/')
+def dashboard():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    return app.index()  # Render the Dash app
 
 @server.route('/logout')
 def logout():
