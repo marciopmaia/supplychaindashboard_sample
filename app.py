@@ -29,7 +29,8 @@ app = Dash(
 def restrict_dash():
     if request.path.startswith('/dashboard'):
         if not session.get('logged_in'):
-            return redirect(url_for('login'))
+            # Show error page instead of redirect
+            return render_template('error.html', message="You must be logged in to access the dashboard."), 401
 
 # ------------------ Flask routes ------------------
 @server.route('/')
@@ -124,6 +125,11 @@ def settings():
         return redirect(url_for('admin'))
 
     return render_template('settings.html', form=form)
+
+@server.route('/error')
+def error():
+    message = request.args.get('message', 'An error occurred.')
+    return render_template('error.html', message=message)
 
 # ------------------ Dash layout ------------------
 df, fig, fig2 = load_and_optimize()
