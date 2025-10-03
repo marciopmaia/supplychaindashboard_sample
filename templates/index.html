@@ -9,7 +9,7 @@
     {% if form.errors %}
         <p class="error">Invalid credentials</p>
     {% endif %}
-    <form method="POST">
+    <form method="POST" action="{{ url_for('login') }}">
         {{ form.hidden_tag() }}
         <div class="form-group">
             <label>{{ form.username.label }}: {{ form.username(size=20) }}</label>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <p>Welcome, {{ username | default('Admin') }}! Choose an action below:</p>
+    <ul>
+        <li><a href="/edit_inventory">Edit Inventory</a></li>
+        <li><a href="/settings">Update Optimization Settings</a></li>
+        <li><a href="/dashboard/">View Dashboard</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</body>
+</html>

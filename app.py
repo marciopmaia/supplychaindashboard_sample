@@ -2,7 +2,7 @@
 # Purpose is to create a custom sample dashboard for a supply chain using some sample test data.
 
 import pandas as pd
-from flask import Flask, render_template, redirect, url_for, session
+from flask import Flask, render_template, redirect, url_for, session, request
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 from forms import LoginForm, InventoryForm, SettingsForm
@@ -23,6 +23,9 @@ df, fig, fig2 = load_and_optimize()
 
 # Flask routes
 @server.route('/')
+def index():
+    return redirect(url_for('login'))
+
 @server.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -33,7 +36,7 @@ def login():
             return redirect(url_for('admin'))
         else:
             return render_template('index.html', form=form, error='Invalid credentials')
-    return render_template('index.html', form=form)
+    return render_template('index.html', form=form)    
 
 @server.route('/admin')
 def admin():
