@@ -1,26 +1,28 @@
 import pandas as pd
-import json
 import os
+import json
 
 def load_data():
-    try:
-        df = pd.read_csv('data/input/inventory_data.csv')
-        required_columns = ['product_id', 'product_name', 'description', 'purpose', 'stock', 'demand_rate', 'lead_time', 'reorder_cost', 'safety_stock']
-        if not all(col in df.columns for col in required_columns):
-            print(f"Error: CSV must contain {required_columns}")
-            return None
-        return df
-    except FileNotFoundError:
-        print("Error: 'data/input/inventory_data.csv' not found.")
+    filepath = 'data/input/inventory_data.csv'
+    if not os.path.exists(filepath):
+        print("Inventory CSV not found")
         return None
+    return pd.read_csv(filepath)
 
 def load_settings():
-    try:
-        with open('data/settings.json', 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {'budget': 1500, 'warehouse_capacity': 1000}
+    settings_file = 'data/settings.json'
+    if not os.path.exists(settings_file):
+        default_settings = {"budget": 1000, "warehouse_capacity": 1000}
+        save_settings(default_settings)
+        return default_settings
+    with open(settings_file,'r') as f:
+        settings = json.load(f)
+    settings.setdefault('budget',1000)
+    settings.setdefault('warehouse_capacity',1000)
+    return settings
 
 def save_settings(settings):
-    with open('data/settings.json', 'w') as f:
-        json.dump(settings, f)
+    settings_file = 'data/settings.json'
+    os.makedirs(os.path.dirname(settings_file), exist_ok=True)
+    with open(settings_file,'w') as f:
+        json.dump(settings,f)

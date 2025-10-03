@@ -1,5 +1,5 @@
 # Created by Marcio Maia
-# Purpose is to create a custom sample dashboard for a supply chain using some sample test data.
+# Purpose: Custom sample dashboard for a supply chain using sample data
 
 import pandas as pd
 from flask import Flask, render_template, redirect, url_for, session, request
@@ -9,28 +9,38 @@ from forms import LoginForm, InventoryForm, SettingsForm
 from optimizer import load_and_optimize
 from utils import load_data, load_settings, save_settings
 import plotly.express as px
+import os
 
-# Flask app
-server = Flask(__name__)
-server.secret_key = 'supersecretkey'  # Use a secure key in production
+# ------------------ Flask app ------------------
+server = Flask(__name__, static_folder='static', static_url_path='/static')
+server.secret_key = 'supersecretkey'
 server.config['WTF_CSRF_ENABLED'] = True
 
-# Dash app integrated with Flask
-app = Dash(__name__, server=server, url_base_pathname='/dashboard/')
+# ------------------ Dash app ------------------
+app = Dash(
+    __name__,
+    server=server,
+    url_base_pathname='/dashboard/',
+    assets_folder='static'
+)
 
-# Initial load
-df, fig, fig2 = load_and_optimize()
+# ------------------ Login protection ------------------
+@server.before_request
+def restrict_dash():
+    if request.path.startswith('/dashboard'):
+        if not session.get('logged_in'):
+            return redirect(url_for('login'))
 
-# Flask routes
+# ------------------ Flask routes ------------------
 @server.route('/')
 def index():
-    return render_template("index.html")
+    return render_template('index.html')
 
 @server.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.username.data == 'admin' and form.password.data == 'password':  # TODO: Replace with secure auth
+        if form.username.data == 'admin' and form.password.data == 'password':  # TODO: secure auth
             session['logged_in'] = True
             return redirect(url_for('admin'))
         else:
@@ -43,11 +53,16 @@ def admin():
         return redirect(url_for('login'))
     return render_template('admin.html')
 
+@server.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('login'))
+
 @server.route('/edit_inventory', methods=['GET', 'POST'])
 def edit_inventory():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-    
+
     df = load_data()
     if df is None:
         return "Error loading data", 500
@@ -93,7 +108,7 @@ def edit_inventory():
 def settings():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-    
+
     form = SettingsForm()
     current_settings = load_settings()
     if request.method == 'GET':
@@ -110,60 +125,51 @@ def settings():
 
     return render_template('settings.html', form=form)
 
-@server.route('/dashboard/')
-def dashboard():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    return app.index()  # Render the Dash app
+# ------------------ Dash layout ------------------
+df, fig, fig2 = load_and_optimize()
+if df is None or df.empty:
+    df = pd.DataFrame(columns=['product_id','stock','reorder_cost','should_reorder'])
+    fig = px.bar(title="No Data Available")
+    fig2 = px.bar(title="No Data Available")
 
-@server.route('/logout')
-def logout():
-    session.pop('logged_in', None)
-    return redirect(url_for('login'))
+app.layout = html.Div([
+    html.H1("Supply Chain Inventory Dashboard"),
+    dcc.Dropdown(
+        id='product-filter',
+        options=[{'label': pid, 'value': pid} for pid in df.get('product_id', [])],
+        multi=True,
+        placeholder="Select products"
+    ),
+    dcc.Interval(id='interval-component', interval=10*1000, n_intervals=0),
+    dcc.Graph(id='stock-graph', figure=fig),
+    html.H2("Reorder Costs"),
+    dcc.Graph(id='cost-graph', figure=fig2),
+    html.A("Admin Dashboard", href="/admin")
+])
 
-# Dash layout with dropdown filter
-if df is not None:
-    app.layout = html.Div([
-        html.H1("Supply Chain Inventory Dashboard"),
-        dcc.Dropdown(
-            id='product-filter',
-            options=[{'label': pid, 'value': pid} for pid in df['product_id']],
-            multi=True,
-            placeholder="Select products"
-        ),
-        dcc.Interval(id='interval-component', interval=10*1000, n_intervals=0),
-        dcc.Graph(id='stock-graph'),
-        html.H2("Reorder Costs"),
-        dcc.Graph(id='cost-graph'),
-        html.A("Admin Dashboard", href="/admin")
-    ])
+@app.callback(
+    [Output('stock-graph', 'figure'),
+     Output('cost-graph', 'figure')],
+    [Input('interval-component', 'n_intervals'),
+     Input('product-filter', 'value')]
+)
+def update_graphs(n_intervals, selected_products):
+    df, fig, fig2 = load_and_optimize()
+    if df is None or df.empty:
+        empty_fig = px.bar(title="No Data Available")
+        return empty_fig, empty_fig
 
-    @app.callback(
-        [Output('stock-graph', 'figure'),
-         Output('cost-graph', 'figure')],
-        [Input('interval-component', 'n_intervals'),
-         Input('product-filter', 'value')]
-    )
-    def update_graphs(n_intervals, selected_products):
-        df, fig, fig2 = load_and_optimize()
-        if df is None:
-            return px.bar(title="Error: Data not loaded"), px.bar(title="Error: Data not loaded")
-        if selected_products:
-            df = df[df['product_id'].isin(selected_products)]
-            fig = px.bar(df, x='product_id', y='stock', color='should_reorder',
-                         title='Filtered Inventory Levels', labels={'stock': 'Stock (000s units)'},
-                         color_continuous_scale='Viridis')
-            fig.add_hline(y=df['reorder_point'].mean(), line_dash="dash", annotation_text="Avg Reorder Point")
-            fig.update_traces(hovertemplate='Product: %{x}<br>Name: %{customdata[0]}<br>Description: %{customdata[1]}<br>Purpose: %{customdata[2]}<br>Stock: %{y}k units<br>Demand: %{customdata[3]}k/day<br>Lead Time: %{customdata[4]} days<br>Safety Stock: %{customdata[5]}k units',
-                              customdata=df[['product_name', 'description', 'purpose', 'demand_rate', 'lead_time', 'safety_stock']])
-            fig2 = px.bar(df, x='product_id', y='reorder_cost', title='Filtered Reorder Costs',
-                          labels={'reorder_cost': 'Cost (000s USD)'}, color_continuous_scale='Plasma')
-        return fig, fig2
+    if selected_products:
+        df = df[df['product_id'].isin(selected_products)]
+        fig = px.bar(df, x='product_id', y='stock', color='should_reorder',
+                     title='Filtered Inventory Levels', color_continuous_scale='Viridis')
+        fig2 = px.bar(df, x='product_id', y='reorder_cost',
+                      title='Filtered Reorder Costs', color_continuous_scale='Plasma')
+    return fig, fig2
 
-# Run the Flask server
+# ------------------ Run server ------------------
 if __name__ == '__main__':
     try:
-        server.run(debug=True, port=8050)
+        server.run(debug=True, port=8050, use_reloader=False)
     except Exception as e:
         print(f"Error running server: {e}")
-        print("Check if port 8050 is free or try: server.run(debug=True, port=8051)")
