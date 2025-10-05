@@ -22,7 +22,7 @@
             </tr>
             {% for subform in form.inventory %}
             <tr>
-                <td>{{ subform.product_id.data }} {{ subform.product_id }}</td>
+                <td>{{ subform.product_id }}</td>
                 <td>{{ subform.product_name }}</td>
                 <td>{{ subform.description }}</td>
                 <td>{{ subform.purpose }}</td>
@@ -31,6 +31,7 @@
                 <td>{{ subform.lead_time }}</td>
                 <td>{{ subform.reorder_cost }}</td>
                 <td>{{ subform.safety_stock }}</td>
+
             </tr>
             {% endfor %}
         </table>

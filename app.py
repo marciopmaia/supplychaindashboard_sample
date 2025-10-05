@@ -2,7 +2,7 @@
 # Purpose: Custom sample dashboard for a supply chain using sample data
 
 import pandas as pd
-from flask import Flask, render_template, redirect, url_for, session, request
+from flask import Flask, render_template, redirect, url_for, session, request, flash
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 from forms import LoginForm, InventoryForm, SettingsForm
@@ -62,46 +62,62 @@ def logout():
 @server.route('/edit_inventory', methods=['GET', 'POST'])
 def edit_inventory():
     if not session.get('logged_in'):
+        flash("Please log in to edit inventory.", "warning")
         return redirect(url_for('login'))
 
     df = load_data()
-    if df is None:
-        return "Error loading data", 500
+    if df is None or df.empty:
+        flash("Error loading inventory data.", "danger")
+        return redirect(url_for('admin'))
 
     form = InventoryForm()
+
+    # ---------- Populate form fields on GET ----------
     if request.method == 'GET':
+        # clear any existing entries then append one per CSV row
         form.inventory.entries = []
         for _, row in df.iterrows():
-            item_form = form.inventory.form_class()
-            item_form.product_id = row['product_id']
-            item_form.product_name = row['product_name']
-            item_form.description = row['description']
-            item_form.purpose = row['purpose']
-            item_form.stock = row['stock']
-            item_form.demand_rate = row['demand_rate']
-            item_form.lead_time = row['lead_time']
-            item_form.reorder_cost = row['reorder_cost']
-            item_form.safety_stock = row['safety_stock']
-            form.inventory.append_entry(item_form)
+            form.inventory.append_entry()            # adds a new blank FormField
+            sub = form.inventory[-1]                 # reference to the newly appended subform
+            # set the data for each subfield
+            sub.product_id.data  = row['product_id']
+            sub.product_name.data = row['product_name']
+            sub.description.data = row['description']
+            sub.purpose.data = row['purpose']
+            sub.stock.data = row['stock']
+            sub.demand_rate.data = row['demand_rate']
+            sub.lead_time.data = row['lead_time']
+            sub.reorder_cost.data = row['reorder_cost']
+            sub.safety_stock.data = row['safety_stock']
 
+        return render_template('edit_inventory.html', form=form)
+
+    # ---------- Handle POST: Update CSV ----------
     if form.validate_on_submit():
         updated_data = []
-        for item_form in form.inventory:
-            row = {
-                'product_id': item_form.product_id.data,
-                'product_name': item_form.product_name.data,
-                'description': item_form.description.data,
-                'purpose': item_form.purpose.data,
-                'stock': float(item_form.stock.data),
-                'demand_rate': float(item_form.demand_rate.data),
-                'lead_time': float(item_form.lead_time.data),
-                'reorder_cost': float(item_form.reorder_cost.data),
-                'safety_stock': float(item_form.safety_stock.data)
-            }
-            updated_data.append(row)
+        for sub in form.inventory:
+            updated_data.append({
+                'product_id': sub.product_id.data,
+                'product_name': sub.product_name.data,
+                'description': sub.description.data,
+                'purpose': sub.purpose.data,
+                'stock': float(sub.stock.data or 0),
+                'demand_rate': float(sub.demand_rate.data or 0),
+                'lead_time': float(sub.lead_time.data or 0),
+                'reorder_cost': float(sub.reorder_cost.data or 0),
+                'safety_stock': float(sub.safety_stock.data or 0)
+            })
+
         new_df = pd.DataFrame(updated_data)
+        os.makedirs('data/input', exist_ok=True)
         new_df.to_csv('data/input/inventory_data.csv', index=False)
+
+        flash("Inventory updated successfully!", "success")
         return redirect(url_for('admin'))
+
+    # If POST but validation failed
+    if request.method == 'POST' and not form.validate_on_submit():
+        flash("There was a problem validating the form. Please check inputs.", "danger")
 
     return render_template('edit_inventory.html', form=form)
 
