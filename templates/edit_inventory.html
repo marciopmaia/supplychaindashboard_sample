@@ -3,40 +3,64 @@
 <head>
     <title>Edit Inventory</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #f4f4f4; }
+        .btn { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; }
+        .alert-success { color: green; }
+        .alert-danger { color: red; }
+        .alert-warning { color: orange; }
+    </style>
 </head>
 <body>
     <h1>Edit Inventory</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
     <form method="POST">
         {{ form.hidden_tag() }}
         <table>
-            <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Description</th>
-                <th>Purpose</th>
-                <th>Stock (000s)</th>
-                <th>Demand Rate (000s/day)</th>
-                <th>Lead Time (days)</th>
-                <th>Reorder Cost (000s USD)</th>
-                <th>Safety Stock (000s)</th>
-            </tr>
-            {% for subform in form.inventory %}
-            <tr>
-                <td>{{ subform.product_id }}</td>
-                <td>{{ subform.product_name }}</td>
-                <td>{{ subform.description }}</td>
-                <td>{{ subform.purpose }}</td>
-                <td>{{ subform.stock }}</td>
-                <td>{{ subform.demand_rate }}</td>
-                <td>{{ subform.lead_time }}</td>
-                <td>{{ subform.reorder_cost }}</td>
-                <td>{{ subform.safety_stock }}</td>
-
-            </tr>
-            {% endfor %}
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Purpose</th>
+                    <th>Stock</th>
+                    <th>Demand Rate</th>
+                    <th>Lead Time</th>
+                    <th>Reorder Cost</th>
+                    <th>Safety Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subform in form.inventory %}
+                <tr>
+                    <td>{{ subform.product_id() }}</td>
+                    <td>{{ subform.product_name() }}</td>
+                    <td>{{ subform.item_description() }}</td>
+                    <td>{{ subform.purpose() }}</td>
+                    <td>{{ subform.stock() }}</td>
+                    <td>{{ subform.demand_rate() }}</td>
+                    <td>{{ subform.lead_time() }}</td>
+                    <td>{{ subform.reorder_cost() }}</td>
+                    <td>{{ subform.safety_stock() }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
-        {{ form.submit }}
+        {{ form.submit(class='btn') }}
     </form>
-    <p><a href="/dashboard">View Dashboard</a> | <a href="/settings">Settings</a> | <a href="/logout">Logout</a></p>
+
+    <p>
+        <a href="/dashboard">View Dashboard</a> |
+        <a href="/logout">Logout</a>
+    </p>
 </body>
 </html>

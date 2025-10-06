@@ -11,7 +11,7 @@ class LoginForm(FlaskForm):
 class InventoryItemForm(FlaskForm):
     product_id = StringField('Product ID', render_kw={'readonly': True})
     product_name = StringField('Product Name', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired()])
+    item_description = StringField('Description', validators=[DataRequired()])
     purpose = StringField('Purpose', validators=[DataRequired()])
     stock = FloatField('Stock (000s)', validators=[DataRequired(), NumberRange(min=0)])
     demand_rate = FloatField('Demand Rate (000s/day)', validators=[DataRequired(), NumberRange(min=0)])
