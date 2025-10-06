@@ -29,8 +29,8 @@ app = Dash(
 def restrict_dash():
     if request.path.startswith('/dashboard'):
         if not session.get('logged_in'):
-            # Show error page instead of redirect
-            return render_template('error.html', message="You must be logged in to access the dashboard."), 401
+            flash("You must be logged in to access the dashboard.", "warning")
+            return redirect(url_for('error'))  
 
 # ------------------ Flask routes ------------------
 @server.route('/')
@@ -74,25 +74,24 @@ def edit_inventory():
 
     # ---------- Populate form fields on GET ----------
     if request.method == 'GET':
-        # clear any existing entries then append one per CSV row
-        form.inventory.entries = []
+        form.inventory.entries.clear()  # Properly clear existing entries (fixes str delegation)
         for _, row in df.iterrows():
-            form.inventory.append_entry()            # adds a new blank FormField
-            sub = form.inventory[-1]                 # reference to the newly appended subform
-            # set the data for each subfield
-            sub.product_id.data  = row['product_id']
-            sub.product_name.data = row['product_name']
-            sub.description.data = row['description']
-            sub.purpose.data = row['purpose']
-            sub.stock.data = row['stock']
-            sub.demand_rate.data = row['demand_rate']
-            sub.lead_time.data = row['lead_time']
-            sub.reorder_cost.data = row['reorder_cost']
-            sub.safety_stock.data = row['safety_stock']
+            form.inventory.append_entry()  # Append a new subform
+            sub = form.inventory[-1]       # Get the last (new) subform
+            # Set data on each field (now safe, as sub is fully initialized)
+            sub.product_id.data = str(row['product_id'])     # Ensure str for StringField
+            sub.product_name.data = str(row['product_name'])
+            sub.description.data = str(row['description'])
+            sub.purpose.data = str(row['purpose'])
+            sub.stock.data = float(row['stock']) if pd.notna(row['stock']) else 0.0
+            sub.demand_rate.data = float(row['demand_rate']) if pd.notna(row['demand_rate']) else 0.0
+            sub.lead_time.data = float(row['lead_time']) if pd.notna(row['lead_time']) else 0.0
+            sub.reorder_cost.data = float(row['reorder_cost']) if pd.notna(row['reorder_cost']) else 0.0
+            sub.safety_stock.data = float(row['safety_stock']) if pd.notna(row['safety_stock']) else 0.0
 
         return render_template('edit_inventory.html', form=form)
 
-    # ---------- Handle POST: Update CSV ----------
+    # ---------- Handle POST: Update CSV ---------- (unchanged from your original)
     if form.validate_on_submit():
         updated_data = []
         for sub in form.inventory:

@@ -20,7 +20,7 @@ class InventoryItemForm(FlaskForm):
     safety_stock = FloatField('Safety Stock (000s)', validators=[DataRequired(), NumberRange(min=0)])
 
 class InventoryForm(FlaskForm):
-    inventory = FieldList(FormField(InventoryItemForm), min_entries=20)
+    inventory = FieldList(FormField(InventoryItemForm), min_entries=0)
     submit = SubmitField('Update Inventory')
 
 class SettingsForm(FlaskForm):
