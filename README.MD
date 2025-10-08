@@ -11,6 +11,7 @@ A sample and simple Python-based tool to display a sample for Supply Chain, incl
 1. Install: `pip install -r requirements.txt`
 2. Run: `python supply_chain_dashboard.py`
 3. Outputs: Dashboard based on input data (CSV) and writes it to `data/output/inventory_dashboard.csv`
+4. Database for admin and regular user log ins with different visibility for each. For the sake of this sample the password for both will be password. The login will be admin and user respectively.
 
 ## Features
 - Reads inventory data from CSV, including product names, descriptions, purposes, and safety stock.
