@@ -18,7 +18,10 @@ TODO Add Features points
 - Reads inventory data from CSV, including product names, descriptions, purposes, and safety stock.
 - Optimizes reorder decisions within a budget.
 - Visualizes stock and reorder costs with interactive Plotly/Dash charts (names/descriptions in hover text).
+
+## TODO
 - TODO Login for admin and login for user
+- TODO Enhancements to the dashboard
 
 ## Sample Output
 ![Stock Dashboard](data/images/outputdashboards/2025-10-02/inventory_dashboard.png)
