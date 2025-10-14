@@ -22,6 +22,7 @@ TODO Add Features points
 ## TODO
 - TODO Login for admin and login for user
 - TODO Enhancements to the dashboard
+- Different dashboard views
 
 ## Sample Output
 ![Stock Dashboard](data/images/outputdashboards/2025-10-02/inventory_dashboard.png)
