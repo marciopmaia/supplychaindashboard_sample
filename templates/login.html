@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Login - Supply Chain Dashboard</title>
@@ -38,5 +38,34 @@
         </form>
         <p><a href="/">Back to Home</a> | <a href="/dashboard/">View Dashboard</a></p>
     </div>
+</body>
+</html> -->
+
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Supply-Chain Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Supply-Chain Dashboard</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for cat, msg in messages %}
+          <div class="flash {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <p>{{ form.username.label }}<br>{{ form.username(size=30) }}</p>
+        <p>{{ form.password.label }}<br>{{ form.password(size=30) }}</p>
+        <p>{{ form.submit(class="btn btn-primary") }}</p>
+    </form>
+</div>
 </body>
 </html>

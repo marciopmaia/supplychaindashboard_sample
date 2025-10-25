@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Optimization Settings</title>
@@ -20,5 +20,37 @@
         {{ form.submit }}
     </form>
     <p><a href="/dashboard">View Dashboard</a> | <a href="/edit_inventory">Edit Inventory</a> | <a href="/logout">Logout</a></p>
+</body>
+</html> -->
+
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Global Settings</h1>
+    <a href="{{ url_for('edit_inventory') }}" class="btn btn-secondary">Back to Inventory</a>
+    <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for cat, msg in messages %}
+          <div class="flash {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <p>{{ form.budget.label }}<br>{{ form.budget() }}</p>
+        <p>{{ form.warehouse_capacity.label }}<br>{{ form.warehouse_capacity() }}</p>
+        <p>{{ form.submit(class="btn btn-primary") }}</p>
+    </form>
+</div>
 </body>
 </html>

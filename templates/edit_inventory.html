@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Edit Inventory</title>
@@ -62,5 +62,62 @@
         <a href="/dashboard">View Dashboard</a> |
         <a href="/logout">Logout</a>
     </p>
+</body>
+</html> -->
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Edit Inventory</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Edit Inventory</h1>
+    <a href="{{ url_for('settings') }}" class="btn btn-secondary">Settings</a>
+    <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for cat, msg in messages %}
+          <div class="flash {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <table>
+            <thead>
+                <tr>
+                    <th>Product ID</th><th>Name</th><th>Description</th><th>Purpose</th>
+                    <th>Stock</th><th>Demand</th><th>Lead Time</th><th>Reorder Cost</th><th>Safety Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for entry in form.inventory %}
+                <tr>
+                    <td>{{ entry.product_id(readonly=True) }}</td>
+                    <td>{{ entry.product_name() }}</td>
+                    <td>{{ entry.item_description() }}</td>
+                    <td>{{ entry.purpose() }}</td>
+                    <td>{{ entry.stock() }}</td>
+                    <td>{{ entry.demand_rate() }}</td>
+                    <td>{{ entry.lead_time() }}</td>
+                    <td>{{ entry.reorder_cost() }}</td>
+                    <td>{{ entry.safety_stock() }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <p>{{ form.submit(class="btn btn-primary") }}</p>
+    </form>
+
+    <hr>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+</div>
 </body>
 </html>

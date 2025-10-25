@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Supply-Chain Dashboard (Read-Only)</h1>
+    <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
+
+    <div id="dash-container">
+        {{ dash_embed|safe }}
+    </div>
+</div>
+</body>
+</html>
