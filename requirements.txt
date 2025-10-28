@@ -1,10 +1,11 @@
 # Current required files to run and execute the python dashboard for supply chain.
 # Versions are specified below, but likely will work with older versions
 
-pandas == 1.5.3
-plotly == 6.1.1
-pulp == 3.3.0
-kaleido == 1.1.0
-dash == 3.2.0
-flask == 2.2.2
-flask-wtf == 1.2.2
+pandas==2.2.3
+numpy==2.0.2          
+plotly==5.24.1
+pulp==2.9.0
+dash==2.18.1
+Flask==3.0.3
+Werkzeug==3.0.4
+flask-wtf==1.2.2
