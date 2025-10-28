@@ -28,6 +28,8 @@ TODO Add Features points
 
 ## TODO
 - TODO Login for admin and login for user
+- TODO Fix login screen
+- TODO Fix inventory
 - TODO Enhancements to the dashboard
 - Different dashboard views
 - CSS updates
