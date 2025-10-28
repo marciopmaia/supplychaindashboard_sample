@@ -7,4 +7,4 @@ pulp == 3.3.0
 kaleido == 1.1.0
 dash == 3.2.0
 flask == 2.2.2
-flask-wtf = 1.2.2
+flask-wtf == 1.2.2

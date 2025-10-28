@@ -7,11 +7,18 @@ A sample and simple Python-based tool to display a sample for Supply Chain, incl
 2. Visualize the cost to reorder inventory per bulk and per unit
 3. User needs to be logged in to view dashboard or reorder items
 
-## Setup
-1. Install: `pip install -r requirements.txt`
-2. Run: `python supply_chain_dashboard.py`
-3. Outputs: Dashboard based on input data (CSV) and writes it to `data/output/inventory_dashboard.csv`
-4. Database for admin and regular user log ins with different visibility for each. For the sake of this sample the password for both will be password. The login will be admin and user respectively.
+## Set up
+# 1. Create a virtual environment
+python3 -m venv venv
+# 2. Activate it
+source venv/bin/activate
+# 3. Now install your packages safely
+pip install -r requirements.txt
+
+## Execution
+1. Run: `python supply_chain_dashboard.py`
+2. Outputs: Dashboard based on input data (CSV) and writes it to `data/output/inventory_dashboard.csv`
+3. Database for admin and regular user log ins with different visibility for each. For the sake of this sample the password for both will be password. The login will be admin and user respectively.
 
 ## Features
 TODO Add Features points
