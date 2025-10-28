@@ -179,7 +179,7 @@ def dashboard():
 # ------------------ DASH LAYOUT & CALLBACKS ------------------
 def build_figures():
     df = load_data()
-    if df is None or df грн.empty:
+    if df is None or df.empty:
         empty = px.bar(title='No inventory data')
         return empty, empty, pd.DataFrame()
 
